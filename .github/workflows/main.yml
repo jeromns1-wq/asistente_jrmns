@@ -23,10 +23,16 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Limpiar y obtener dependencias
+      - name: Generar proyecto Android
+        run: flutter create --platforms android .
+
+      - name: Fixear Kotlin a 1.9.22
         run: |
-          flutter clean
-          flutter pub get
+          sed -i 's/version "1.7.10"/version "1.9.22"/g' android/settings.gradle
+          cat android/settings.gradle | grep kotlin
+
+      - name: Obtener dependencias
+        run: flutter pub get
 
       - name: Build APK
         run: flutter build apk --release
